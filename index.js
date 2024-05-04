@@ -15,6 +15,10 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+app.get('/', (req, res) => {
+    res.send('Welcome to the nodemailer API');
+});
+
 app.post('/api/send-email', (req, res) => {
     const {to, subject, body} = req.body;
     const mailOptions = {
