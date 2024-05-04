@@ -15,17 +15,27 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+function generateEmailHTML(title, description, dueDate) {
+    return `
+        <h1>New Task Added:</h1>
+        <p><strong>Title:</strong> ${title}</p>
+        <p><strong>Description:</strong> ${description}</p>
+        <p><strong>Due Date:</strong> ${dueDate}</p>
+    `;
+}
+
 app.get('/', (req, res) => {
     res.send('Welcome to the nodemailer API');
 });
 
 app.post('/api/send-email', (req, res) => {
-    const {to, subject, body} = req.body;
+    const { to, subject, body } = req.body;
+    const { title, description, due } = body;
     const mailOptions = {
         from: process.env.EMAIL,
         to,
         subject,
-        text: body
+        html: generateEmailHTML(title, description, due)
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
